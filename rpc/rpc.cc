@@ -400,9 +400,12 @@ rpcs::updatestat(unsigned int proc)
 	curr_counts_--;
 	if(curr_counts_ == 0) {
 		std::map<int, int>::iterator i;
+		printf("RPC STATS: ");
 		for (i = counts_.begin(); i != counts_.end(); i++) {
-			jsl_log(JSL_DBG_1, "RPC STATS: %x %d\n", i->first, i->second);
+			printf("%x %d ", i->first, i->second);
 		}
+		printf("\n");
+
 		ScopedLock rwl(&reply_window_m_);
 		std::map<unsigned int,std::list<reply_t> >::iterator clt;
 
@@ -412,7 +415,7 @@ rpcs::updatestat(unsigned int proc)
 			if (clt->second.size() > maxrep)
 				maxrep = clt->second.size();
 		}
-		jsl_log(JSL_DBG_1, "REPLY WINDOW: clients %ld total reply %d max per client %d\n", 
+		jsl_log(JSL_DBG_1, "REPLY WINDOW: clients %d total reply %d max per client %d\n", 
 				reply_window_.size(), totalrep, maxrep);
 		curr_counts_ = counting_;
 	}
@@ -687,15 +690,6 @@ operator<<(marshall &m, unsigned long long x)
 	return m;
 }
 
-marshall &
-operator<<(marshall &m, unsigned long x)
-{
-  if(sizeof(unsigned long) == sizeof(unsigned int))
-    return m << (unsigned int)x;
-  if(sizeof(unsigned long) == sizeof(unsigned long long))
-    return m << (unsigned long long) x;
-}
-
 void
 marshall::pack(int x)
 {
@@ -805,15 +799,6 @@ operator>>(unmarshall &u, unsigned long long &x)
 	u >> l;
 	x = l | ((unsigned long long) h << 32);
 	return u;
-}
-
-unmarshall &
-operator>>(unmarshall &u, unsigned long &x)
-{
-  if(sizeof(unsigned long) == sizeof(unsigned int))
-    return u >> (unsigned int &) x;
-  if(sizeof(unsigned long) == sizeof(unsigned long long))
-    return u >> (unsigned long long &) x;
 }
 
 unmarshall &
