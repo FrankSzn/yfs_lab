@@ -690,15 +690,6 @@ operator<<(marshall &m, unsigned long long x)
 	return m;
 }
 
-marshall &
-operator<<(marshall &m, unsigned long x)
-{
-	if(sizeof(unsigned long) == sizeof(unsigned int))
-		return m << (unsigned int) x;
-	if(sizeof(unsigned long) == sizeof(unsigned long long))
-		return m << (unsigned long long) x;
-}
-
 void
 marshall::pack(int x)
 {
@@ -808,6 +799,15 @@ operator>>(unmarshall &u, unsigned long long &x)
 	u >> l;
 	x = l | ((unsigned long long) h << 32);
 	return u;
+}
+
+marshall &
+operator<<(marshall &m, unsigned long x)
+{
+	if(sizeof(unsigned long) == sizeof(unsigned int))
+		return m << (unsigned int) x;
+	if(sizeof(unsigned long) == sizeof(unsigned long long))
+		return m << (unsigned long long) x;
 }
 
 unmarshall &
