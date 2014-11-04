@@ -84,9 +84,9 @@ fuseserver_setattr(fuse_req_t req, fuse_ino_t ino, struct stat *attr, int to_set
   printf("fuseserver_setattr 0x%x\n", to_set);
   if (FUSE_SET_ATTR_SIZE & to_set) {
     printf("   fuseserver_setattr set size to %zu\n", attr->st_size);
+#if 0
     struct stat st;
     // You fill this in
-#if 0
     fuse_reply_attr(req, &st, 0);
 #else
     fuse_reply_err(req, ENOSYS);
@@ -193,7 +193,7 @@ void dirbuf_add(struct dirbuf *b, const char *name, fuse_ino_t ino)
 int reply_buf_limited(fuse_req_t req, const char *buf, size_t bufsize,
           off_t off, size_t maxsize)
 {
-  if (off < bufsize)
+  if ((size_t)off < bufsize)
     return fuse_reply_buf(req, buf + off, min(bufsize - off, maxsize));
   else
     return fuse_reply_buf(req, NULL, 0);
@@ -241,10 +241,9 @@ void
 fuseserver_mkdir(fuse_req_t req, fuse_ino_t parent, const char *name,
      mode_t mode)
 {
-  struct fuse_entry_param e;
-
-  // You fill this in
 #if 0
+  struct fuse_entry_param e;
+  // You fill this in
   fuse_reply_entry(req, &e);
 #else
   fuse_reply_err(req, ENOSYS);
