@@ -11,6 +11,7 @@
 class lock_server_cache {
  public:
   lock_server_cache();
+  lock_server_cache(class rsm *_rsm);
   lock_protocol::status stat(lock_protocol::lockid_t, int &);
   void revoker();
   void retryer();
