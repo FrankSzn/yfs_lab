@@ -54,10 +54,12 @@ lock_client_cache::releaser()
 lock_protocol::status
 lock_client_cache::acquire(lock_protocol::lockid_t lid)
 {
+  return lock_protocol::RPCERR;
 }
 
 lock_protocol::status
 lock_client_cache::release(lock_protocol::lockid_t lid)
 {
+  return lock_protocol::RPCERR;
 }
 
